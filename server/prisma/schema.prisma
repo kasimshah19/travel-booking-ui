@@ -10,33 +10,47 @@ datasource db {
 }
 
 model User {
-  id           String    @id @default(uuid())
-  name         String
-  email        String    @unique
-  passwordHash String
-  createdAt    DateTime  @default(now())
-  bookings     Booking[]
+  id            String         @id @default(uuid())
+  name          String
+  email         String         @unique
+  passwordHash  String
+  createdAt     DateTime       @default(now())
+  bookings      Booking[]
   refreshTokens RefreshToken[]
 }
 
 model RefreshToken {
-  id          String   @id @default(uuid())
-  tokenHash   String   @unique
-  userId      String
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  isRevoked   Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  expiresAt   DateTime
+  id        String   @id @default(uuid())
+  tokenHash String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  isRevoked Boolean  @default(false)
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+}
+
+enum DestinationCategory {
+  BEACH
+  MOUNTAIN
+  HERITAGE
+  WILDLIFE
+  HILL_STATION
+  BACKWATERS
 }
 
 model Destination {
-  id          String    @id @default(uuid())
-  name        String
-  description String
-  imagePath   String
-  basePrice   Float
-  createdAt   DateTime  @default(now())
-  bookings    Booking[]
+  id             String               @id @default(uuid())
+  name           String
+  location       String               @default("India")
+  category       DestinationCategory  @default(HERITAGE)
+  description    String
+  imagePath      String
+  basePrice      Float
+  originalPrice  Float?
+  rating         Float                @default(4.5)
+  amenities      String[]
+  createdAt      DateTime             @default(now())
+  bookings       Booking[]
 }
 
 enum BookingStatus {

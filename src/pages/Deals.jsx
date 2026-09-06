@@ -2,12 +2,25 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Flame, Clock } from "lucide-react";
 import DestinationCard from "../components/DestinationCard";
-import destinations from "../data/destinations";
+import api from "../api/axios";
 
 export default function Deals() {
     const [timeLeft, setTimeLeft] = useState(48 * 60 * 60);
+    const [dealDestinations, setDealDestinations] = useState([]);
 
     useEffect(() => {
+        const fetchDeals = async () => {
+            try {
+                const { data } = await api.get('/destinations');
+                // Filter only destinations that have an originalPrice
+                const deals = data.filter(dest => dest.originalPrice && dest.originalPrice > dest.basePrice).slice(0, 3);
+                setDealDestinations(deals);
+            } catch (err) {
+                console.error("Failed to fetch deals", err);
+            }
+        };
+        fetchDeals();
+
         const timer = setInterval(() => {
             setTimeLeft((prev) => (prev > 0 ? prev - 1 : 0));
         }, 1000);
@@ -20,11 +33,6 @@ export default function Deals() {
         const s = (seconds % 60).toString().padStart(2, "0");
         return `${h}:${m}:${s}`;
     };
-
-    const dealDestinations = destinations.slice(0, 3).map((dest) => ({
-        ...dest,
-        originalPrice: Math.floor(dest.price * 1.4),
-    }));
 
     return (
         <motion.div
@@ -66,21 +74,7 @@ export default function Deals() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {dealDestinations.map((dest) => (
-                    <div key={dest.id} className="relative group">
-                        {/* Discount Badge */}
-                        <div className="absolute top-4 right-4 bg-coral text-white text-xs font-bold px-3 py-1.5 rounded-full z-10 shadow-md">
-                            -30% OFF
-                        </div>
-
-                        <motion.div whileHover={{ y: -5 }}>
-                            <DestinationCard destination={dest} />
-                            <div className="absolute bottom-6 right-36 bg-white/80 dark:bg-slate-800/80 px-2 py-1 rounded backdrop-blur-sm">
-                                <span className="text-sm line-through text-red-500 font-semibold">
-                                    ₹{dest.originalPrice}
-                                </span>
-                            </div>
-                        </motion.div>
-                    </div>
+                    <DestinationCard key={dest.id} destination={dest} />
                 ))}
             </div>
         </motion.div>
