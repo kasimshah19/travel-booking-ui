@@ -14,6 +14,15 @@
 ## 📌 Overview
 Wanderlist is a production-ready, full-stack travel reservation platform designed with premium aesthetics and a highly robust backend architecture. It features secure JWT-based authentication, real-time slot booking with concurrency management, and an end-to-end payment & auto-refund system powered by Razorpay.
 
+## 🌐 Live Deployments
+The application is fully configured and deployed across scalable cloud environments.
+
+| Architecture Tier | Provider | Live URL | Description |
+| :--- | :--- | :--- | :--- |
+| **Frontend UI** | Vercel | [travel-booking-ui-one.vercel.app](https://travel-booking-ui-one.vercel.app/) | React (Vite) client providing a premium, interactive user experience and state management. |
+| **Backend API** | Render | [travel-booking-ui.onrender.com](https://travel-booking-ui.onrender.com/) | Node.js/Express server handling core business logic, webhooks, and temporal expiry crons. |
+| **Database** | Neon.tech | *Secured* | Serverless PostgreSQL database utilized for relation modeling and Prisma ORM connection pooling. |
+
 ## 🚀 Key Architectural Features (Recruiter Highlights)
 
 * **Concurrency & Slot Reservation Lock:** Engineered a zero-collision booking system using deterministic `activeSlotKey` logic inside isolated Prisma transactions. Abandoned checkouts are tracked and swept automatically using a lifecycle manager (Node server intervals) to gracefully free up slots.
