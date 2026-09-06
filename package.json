@@ -9,7 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@hookform/resolvers": "^5.9.1",
+    "@hookform/resolvers": "^3.9.0",
     "axios": "^1.20.0",
     "framer-motion": "^13.2.0",
     "lucide-react": "^1.41.0",
@@ -18,7 +18,7 @@
     "react-hook-form": "^7.87.0",
     "react-hot-toast": "^2.6.0",
     "react-router-dom": "^6.26.0",
-    "zod": "^4.5.4",
+    "zod": "^3.23.8",
     "zustand": "^5.0.15"
   },
   "devDependencies": {
