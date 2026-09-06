@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-sand text-ink dark:bg-slate-900 dark:text-sand font-body transition-colors duration-300;
+}
+
+h1, h2, h3 {
+  @apply font-display;
+}

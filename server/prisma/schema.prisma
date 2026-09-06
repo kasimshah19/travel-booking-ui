@@ -1,0 +1,90 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"] // Prepared for serverless/pooled connections if needed
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id           String    @id @default(uuid())
+  name         String
+  email        String    @unique
+  passwordHash String
+  createdAt    DateTime  @default(now())
+  bookings     Booking[]
+  refreshTokens RefreshToken[]
+}
+
+model RefreshToken {
+  id          String   @id @default(uuid())
+  tokenHash   String   @unique
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  isRevoked   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  expiresAt   DateTime
+}
+
+model Destination {
+  id          String    @id @default(uuid())
+  name        String
+  description String
+  imagePath   String
+  basePrice   Float
+  createdAt   DateTime  @default(now())
+  bookings    Booking[]
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  EXPIRED
+}
+
+model Booking {
+  id                   String        @id @default(uuid())
+  userId               String
+  destinationId        String
+  date                 DateTime
+  slot                 String
+  status               BookingStatus @default(PENDING)
+  activeSlotKey        String?       @unique
+  reservationExpiresAt DateTime?
+  createdAt            DateTime      @default(now())
+
+  user        User        @relation(fields: [userId], references: [id])
+  destination Destination @relation(fields: [destinationId], references: [id])
+  payment     Payment?
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
+  PENDING_REFUND
+  REFUNDED
+  REFUND_FAILED
+  NOT_REFUNDED
+}
+
+model Payment {
+  id                String        @id @default(uuid())
+  bookingId         String        @unique
+  amount            Float
+  currency          String        @default("INR")
+  gatewayOrderId    String?
+  gatewayPaymentId  String?
+  refundId          String?
+  refundedAmount    Int?
+  refundInitiatedAt DateTime?
+  refundCompletedAt DateTime?
+  status            PaymentStatus @default(PENDING)
+  createdAt         DateTime      @default(now())
+
+  booking Booking @relation(fields: [bookingId], references: [id])
+}
