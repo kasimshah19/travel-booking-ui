@@ -154,8 +154,8 @@ const createPaymentOrder = async (req, res) => {
             key_id: process.env.RAZORPAY_KEY_ID
         });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Failed to create payment order' });
+        console.error("Payment error detail:", error);
+        res.status(500).json({ error: 'Failed to create payment order', details: error.message || error });
     }
 };
 
