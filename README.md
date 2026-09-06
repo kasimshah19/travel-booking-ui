@@ -23,22 +23,41 @@ The application is fully configured and deployed across scalable cloud environme
 | **Backend API** | Render | [travel-booking-ui.onrender.com](https://travel-booking-ui.onrender.com/) | Node.js/Express server handling core business logic, webhooks, and temporal expiry crons. |
 | **Database** | Neon.tech | *Secured* | Serverless PostgreSQL database utilized for relation modeling and Prisma ORM connection pooling. |
 
-## 🚀 Key Architectural Features (Recruiter Highlights)
+---
 
-* **Concurrency & Slot Reservation Lock:** Engineered a zero-collision booking system using deterministic `activeSlotKey` logic inside isolated Prisma transactions. Abandoned checkouts are tracked and swept automatically using a lifecycle manager (Node server intervals) to gracefully free up slots.
-* **Idempotent Payment Engine:** Hardened the Razorpay integration against double-spending and network races. Reacts securely to webhook callbacks (`payment.captured`, `refund.processed`) with strict HMAC SHA256 signature verification. 
-* **Automated Refund Policy:** Built a smart cancellation engine that calculates travel window distances programmatically. Instantly initiates 100% Refunds for eligible cancellations (48+ hours prior) directly through Razorpay API logic.
-* **Dynamic Client-Side Experience:** Utilizes Zustand for global state management, Framer Motion for premium staggered UI reveals, and `react-hot-toast` for frictionless user feedback. Native Light/Dark mode enabled globally.
+## � Team & Contributions (Recruiter Highlights)
 
-## 💻 Tech Stack
+This project was built collaboratively, dividing complex full-stack responsibilities into specialized roles to ensure production-grade quality across both the UI and the Backend engineering.
 
-| Tier | Technology |
-|---|---|
-| **Frontend UI/UX** | React, Vite, Tailwind CSS, Framer Motion, Lucide React, Hot-Toast |
-| **State & Data** | Zustand (Global State), React Hook Form, Zod, Axios |
-| **Backend & Routing**| Node.js, Express.js, Cookie-Parser, CORS |
-| **Database & ORM** | Neon.tech (Serverless PostgreSQL), Prisma ORM |
-| **Security & Payments**| JWT (HTTP-Only Auth), Razorpay Payment Gateway, HMAC Validation |
+| Team Member | Role | Core Contributions & Engineering Solutions |
+| :--- | :--- | :--- |
+| **Kasim Shah** | **Lead Backend & Database Engineer** | • **Database Architecture:** Designed relational models (Prisma/Postgres) connecting Users, Destinations, Bookings, and Payments.<br>• **Payment Integration:** Built end-to-end Razorpay integration including order creation, signature verification (HMAC SHA256), and async webhook listeners.<br>• **Concurrency Locks:** Engineered zero-collision booking by implementing deterministic `activeSlotKey` logic inside DB transactions.<br>• **Automated Crons:** Developed server-side sweeping intervals to auto-expire abandoned carts and programmatic policy-based refund triggers. |
+| **Faizan Khatib** | **Lead Frontend & UI/UX Engineer** | • **Visual Design:** Architected the premium look-and-feel of the application, utilizing Tailwind CSS for responsive and dynamic theming (Dark/Light mode).<br>• **Micro-Interactions:** Integrated `Framer Motion` for staggered component reveals and smooth page transitions.<br>• **Client Logic:** Managed complex client state using `Zustand` and built highly validated user forms utilizing `React Hook Form` and `Zod`.<br>• **UX Optimization:** Designed seamless user feedback loops with dynamic skeleton loaders, API error boundaries, and `react-hot-toast` notifications. |
+
+---
+
+## 🚀 Key Architectural Features
+
+* **Deterministic Slot Reservation:** Engineered a zero-collision booking system. When a user begins checkout, the specific date/slot is hard-locked in the Database. Abandoned checkouts are tracked and swept automatically using a lifecycle manager to gracefully free up slots.
+* **Idempotent Payment Engine:** Hardened the Razorpay integration against double-spending and network races. Reacts securely to webhook callbacks (`payment.captured`, `refund.processed`) instead of relying solely on client-side success callbacks.
+* **Automated Refund Policy:** Built a smart cancellation engine that calculates travel window distances programmatically. Instantly initiates 100% Refunds for eligible cancellations (48+ hours prior) directly through the Razorpay Dashboard APIs.
+
+---
+
+## 💻 Detailed Technology Stack
+
+| Category | Technologies Used | Purpose |
+| :--- | :--- | :--- |
+| **Frontend Framework** | React.js (Vite) | Lightning-fast component rendering and HMR. |
+| **Styling & UI** | Tailwind CSS, Framer Motion | Utility-first styling with complex, staggered DOM animations. |
+| **State & Forms** | Zustand, React Hook Form, Zod | Global state persistence, frictionless form handling, and strict schema validation. |
+| **Backend Core** | Node.js, Express.js | High-performance RESTful API generation and routing. |
+| **Database & ORM** | PostgreSQL, Prisma ORM | Relational data integrity, schema migrations, and type-safe DB queries. |
+| **Authentication** | JSON Web Tokens (JWT), bcryptjs | HTTP-Only cookie-based authentication ensuring zero XSS token leakage. |
+| **External APIs** | Razorpay Node SDK | Handling domestic/international payments and automated refunds. |
+| **DevOps & Hosting**| Vercel, Render, Neon.tech | CD/CI pipelines for serverless frontend, persistent backend, and cloud database. |
+
+---
 
 ## 🛠️ Local Development Setup
 
@@ -66,17 +85,12 @@ npm install
 ### 4. Environment Variables (`server/.env`)
 Create an `.env` file in the `/server` directory and configure the following:
 ```env
-# Database Configuration
 DATABASE_URL="postgresql://user:password@hostname/dbname?sslmode=require"
 DIRECT_URL="postgresql://user:password@hostname/dbname?sslmode=require"
-
-# JWT Secret
 JWT_SECRET="your_highly_secure_jwt_secret"
-
-# Razorpay Test Credentials
 RAZORPAY_KEY_ID="rzp_test_..."
 RAZORPAY_KEY_SECRET="..."
-RAZORPAY_WEBHOOK_SECRET="your_custom_webhook_secret"
+FRONTEND_URL="http://localhost:5173"
 ```
 
 ### 5. Finalize Database & Start
@@ -89,11 +103,5 @@ node prisma/seed.js
 node index.js
 ```
 
-## 📸 Core Flows
-1. **Authentication:** Secure sign-up/login generating HTTP-Only JWT tokens inside interceptors.
-2. **Booking Engine:** User selects destination, travel dates, and time slot. Backend strictly prevents past-date bookings and handles multi-slot locks simultaneously.
-3. **Payment & Webhooks:** Complete payment flow via Razorpay popup. Async webhook listeners atomically commit Confirmed routes to the database upon capture.
-4. **My Bookings Dashboard:** Clean historic and upcoming grouped UI tabs. Supports 1-click active cancellation and instant timeline updates.
-
 ---
-*Architected and developed by Kasim Shah.*
+*Built with ❤️ by Kasim Shah & Faizan Khatib.*
