@@ -37,7 +37,7 @@ The application is fully configured and deployed across scalable cloud environme
 
 ---
 
-## � Team & Contributions (Recruiter Highlights)
+## � Team & Contributions
 
 This project was built collaboratively, dividing complex full-stack responsibilities into specialized roles to ensure production-grade quality across both the UI and the Backend engineering.
 
