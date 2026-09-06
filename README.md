@@ -23,8 +23,8 @@
   <img src="https://img.shields.io/badge/ESLint-4B32C3?style=for-the-badge&logo=eslint&logoColor=white" />
 </p>
 
-## 📌 Overview
-Wanderlist is a production-ready, full-stack travel reservation platform designed with premium aesthetics and a highly robust backend architecture. It features secure JWT-based authentication, real-time slot booking with concurrency management, and an end-to-end payment & auto-refund system powered by Razorpay.
+## 📌 About Wanderlist
+Wanderlist isn't just a travel booking system; it's a showcase of **scalable engineering** and **premium UX**. Built for production, it tackles complex real-world challenges: it handles strict database concurrency to guarantee zero double-bookings, enforces an idempotent Razorpay payment pipeline, and orchestrates automated refunds using server-side temporal sweeps. Backed by a serverless PostgreSQL architecture and wrapped in a stunning, Framer Motion-powered interface, Wanderlist bridges the gap between deep backend complexity and flawless frontend elegance.
 
 ## 🌐 Live Deployments
 The application is fully configured and deployed across scalable cloud environments.
