@@ -120,11 +120,12 @@ const createPaymentOrder = async (req, res) => {
         // Assuming basePrice is the total cost here (Point 1: Server-side calculation)
         const amountInPaise = Math.round(booking.destination.basePrice * 100);
 
-        // Call Razorpay API
+        // Call Razorpay API (Receipt string must be <= 40 chars max!)
+        const shortReceipt = bookingId.replace(/-/g, '').substring(0, 30);
         const order = await razorpay.orders.create({
             amount: amountInPaise,
             currency: "INR",
-            receipt: `receipt_booking_${bookingId}`,
+            receipt: `rcp_${shortReceipt}`,
             payment_capture: 1 // Auto-capture (or handled via webhook)
         });
 
