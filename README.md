@@ -44,7 +44,7 @@ This project was built collaboratively, dividing complex full-stack responsibili
 
 ---
 
-## 💻 Detailed Technology Stack
+## 💻 Technology Stack
 
 | Category | Technologies Used | Purpose |
 | :--- | :--- | :--- |
